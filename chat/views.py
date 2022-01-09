@@ -4,6 +4,7 @@ from starlette.endpoints import HTTPEndpoint
 from starlette.responses import HTMLResponse
 from settings import SITE_HOST
 from producer import methods as producer_methods
+
 html = """
 <!DOCTYPE html>
 <html>
@@ -52,9 +53,9 @@ html = """
 class Chat(HTTPEndpoint):
     async def get(self, request):
         channel_groups.groups_show()
-        await channel_groups.group_send("group_1", {"username": "ChatTest1 Endpoint", "message": "Notify send from ChatTest1"})
+        await channel_groups.group_send("group_1",
+                                        {"username": "ChatTest1 Endpoint", "message": "Notify send from ChatTest1"})
         return HTMLResponse(html)
-
 
 
 class ChatSocket(ChannelEndpoint):
@@ -64,13 +65,11 @@ class ChatSocket(ChannelEndpoint):
         self.encoding = "json"
 
     async def on_receive(self, websocket, data):
-
         group_id = data["group_id"]
         message = data["message"]
         username = data["username"]
 
         if message.strip():
-
             self.get_or_create(group_id)
             payload = {
                 "username": username,
