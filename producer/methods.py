@@ -6,7 +6,7 @@ from settings import AMQP_URI
 
 
 async def send_message_to_internal_messager(outcoming_message_dict):
-    cprint(f"AMQP PRODUCER:     send_message_to_internal_messager", "green")
+    cprint("AMQP PRODUCER:     send_message_to_internal_messager", "green")
     outcoming_message_dict.update({"source": "external__main"})
     outcoming_message_bytes = json.dumps(outcoming_message_dict).encode()
     connection = await aiormq.connect(AMQP_URI)
